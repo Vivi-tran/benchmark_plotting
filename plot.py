@@ -52,7 +52,7 @@ def main():
         dockq_files=dockq_files,
         mean_dockq_files=mean_dockq_files,
         correlation_files=correlation_files,
-        report_basename=args.name
+        report_basename='dockq_report.html'  
     )
 
 if __name__ == "__main__":
