@@ -68,12 +68,16 @@ plots <- list()
 for (f in dockq_files) {
   ds <- sub("\\..*$", "", basename(f))
   df <- read_csv(f)
-  x_col <- if (ds %in% names(df)) ds else names(df)[1]
-  p <- ggplot(df, aes_string(x = x_col, y = "dockq")) +
-    geom_point(alpha = 0.7) +
-    labs(title = paste(ds, "DockQ Scatter Plot"), x = ds, y = "DockQ") +
-    theme_classic()
-  plots[[ds]] <- p
+  if ("dockq" %in% names(df)) {
+    x_col <- if (ds %in% names(df)) ds else names(df)[1]
+    p <- ggplot(df, aes_string(x = x_col, y = "dockq")) +
+      geom_point(alpha = 0.7) +
+      labs(title = paste(ds, "DockQ Scatter Plot"), x = ds, y = "DockQ") +
+      theme_classic()
+    plots[[ds]] <- p
+  } else {
+    message(paste("File", f, "does not contain a 'dockq' column. Skipping."))
+  }
 }
 wrap_plots(plots)
 ```
