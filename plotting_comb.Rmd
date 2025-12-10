@@ -1,0 +1,127 @@
+---
+title: "DockQ Benchmark Report (Combined)"
+date: "`r format(Sys.time(), '%d %B, %Y %H:%M:%S')`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+    code_download: true
+    number_sections: true
+    df_print: kable
+    theme: lumen
+params:
+  output_dir: "output"
+  dockq_files: NULL
+  mean_dockq_files: NULL
+  correlation_files: NULL
+editor_options:
+  chunk_output_type: console
+---
+
+```
+
+Place this YAML header before your first code chunk. This will fix the `object 'params' not found` error.// filepath: /Users/vitran/Documents/Work/Github/benchmark_plotting/plotting_comb.Rmd
+---
+title: "DockQ Benchmark Report (Combined)"
+date: "`r format(Sys.time(), '%d %B, %Y %H:%M:%S')`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+    code_download: true
+    number_sections: true
+    df_print: kable
+    theme: lumen
+params:
+  output_dir: "output"
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, echo=FALSE, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(readr)
+library(patchwork) # Add this for plot arrangement
+
+output_dir <- params$output_dir
+dockq_files <- params$dockq_files
+mean_dockq_files <- params$mean_dockq_files
+correlation_files <- params$correlation_files
+```
+
+# DockQ Scatter Plots
+
+```{r dockq-scatter-combined, fig.width=18, fig.height=5, warning=FALSE}
+plots <- list()
+for (ds in datasets) {
+  csv_file <- file.path(output_dir, paste0(ds, ".dockq.csv"))
+  if (file.exists(csv_file)) {
+    df <- read_csv(csv_file)
+    x_col <- if (ds %in% names(df)) ds else names(df)[1]
+    p <- ggplot(df, aes_string(x = x_col, y = "dockq")) +
+      geom_point(alpha = 0.7) +
+      labs(title = paste(ds, "DockQ Scatter Plot"), x = ds, y = "DockQ") +
+      theme_classic()
+    plots[[ds]] <- p
+  }
+}
+wrap_plots(plots)
+```
+
+# Mean DockQ Bar Plots
+
+```{r meandockq-bar-combined, fig.width=18, fig.height=5, warning=FALSE}
+plots <- list()
+for (ds in datasets) {
+  csv_file <- file.path(output_dir, paste0(ds, ".meandockq.csv"))
+  if (file.exists(csv_file)) {
+    df <- read_csv(csv_file)
+    df_filtered <- df %>% filter(metric %in% c("all", "rank1", "best_dockq"))
+    p <- ggplot(df_filtered, aes(x = metric, y = value, fill = metric)) +
+      geom_bar(stat = "identity", position = "dodge") +
+      labs(title = paste(ds, "Mean DockQ"), x = "Type", y = "Mean DockQ") +
+      theme_classic()
+    plots[[ds]] <- p
+  }
+}
+wrap_plots(plots)
+```
+
+# Correlation Plots
+
+```{r correlation-plots-combined, fig.width=18, fig.height=10, warning=FALSE}
+pearson_plots <- list()
+spearman_plots <- list()
+for (ds in datasets) {
+  csv_file <- file.path(output_dir, paste0(ds, ".correlation.csv"))
+  if (file.exists(csv_file)) {
+    df <- read_csv(csv_file)
+    df_all <- df %>% filter(method == "all")
+    # Pearson plot
+    df_pearson <- df_all %>% filter(metric == "pearson" & !is.na(r))
+    if (nrow(df_pearson) > 0) {
+      p <- ggplot(df_pearson, aes(x = feature, y = r)) +
+        geom_bar(stat = "identity", fill = "skyblue") +
+        coord_flip() +
+        labs(title = paste(ds, "Pearson Correlation (method = all)"), x = "Feature", y = "Pearson r") +
+        theme_classic()
+      pearson_plots[[ds]] <- p
+    }
+    # Spearman plot
+    df_spearman <- df_all %>% filter(metric == "spearman" & !is.na(r))
+    if (nrow(df_spearman) > 0) {
+      p <- ggplot(df_spearman, aes(x = feature, y = r)) +
+        geom_bar(stat = "identity", fill = "orange") +
+        coord_flip() +
+        labs(title = paste(ds, "Spearman Correlation (method = all)"), x = "Feature", y = "Spearman r") +
+        theme_classic()
+      spearman_plots[[ds]] <- p
+    }
+  }
+}
+wrap_plots(pearson_plots) / wrap_plots(spearman_plots)
+```
