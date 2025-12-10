@@ -42,11 +42,15 @@ def main():
 
     args = parser.parse_args()
 
+    dockq_files = getattr(args, 'metrics.dockq')
+    mean_dockq_files = getattr(args, 'metrics.mean_dockq')
+    correlation_files = getattr(args, 'correlation.scores')
+
     process(
         output_dir=args.output_dir,
-        dockq_files=args.metrics_dockq,
-        mean_dockq_files=args.metrics_mean_dockq,
-        correlation_files=args.correlation_scores,
+        dockq_files=dockq_files,
+        mean_dockq_files=mean_dockq_files,
+        correlation_files=correlation_files,
         report_basename=args.name
     )
 
