@@ -38,7 +38,7 @@ def main():
     parser.add_argument('--metrics.dockq', type=str, nargs='+', required=True, help='DockQ metrics files.')
     parser.add_argument('--metrics.mean_dockq', type=str, nargs='+', required=True, help='Mean DockQ metrics files.')
     parser.add_argument('--correlation.scores', type=str, nargs='+', required=True, help='Correlation scores files.')
-    parser.add_argument('--report_basename', type=str, default='dockq_report.html', help='Output HTML report name.')
+    parser.add_argument('--name', type=str, default='dockq_report.html', help='Output HTML report name.')
 
     args = parser.parse_args()
 
@@ -47,7 +47,7 @@ def main():
         dockq_files=args.metrics_dockq,
         mean_dockq_files=args.metrics_mean_dockq,
         correlation_files=args.correlation_scores,
-        report_basename=args.report_basename
+        report_basename=args.name
     )
 
 if __name__ == "__main__":
