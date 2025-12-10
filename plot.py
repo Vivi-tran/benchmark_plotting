@@ -23,7 +23,8 @@ def process(output_dir, dockq_files, mean_dockq_files, correlation_files, report
         f"mean_dockq_files = I(c({', '.join([f'\"{f}\"' for f in mean_dockq_files])})), "
         f"correlation_files = I(c({', '.join([f'\"{f}\"' for f in correlation_files])}))"
         f"), "
-        f"output_file = '{report_basename}')"
+        f"output_file = '{report_basename}', "
+        f"output_dir = '{output_dir_abs}')"
     )
 
     subprocess.run(
