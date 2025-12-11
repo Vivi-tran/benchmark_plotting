@@ -86,44 +86,6 @@ wrap_plots(plots)
 
 # Correlation Plots
 
-```{r correlation-plots-combined, fig.width=18, fig.height=10, warning=FALSE, message=FALSE, results='hide', echo=FALSE, eval=FALSE}
-pearson_plots <- list()
-spearman_plots <- list()
-for (f in correlation_files) {
-  ds <- sub("\\..*$", "", basename(f))
-  df <- read_csv(f)
-  # Filter only 'all' and 'rank1' methods
-  df <- df %>% filter(method %in% c("all"))
-  # Pearson plot for selected methods
-  df_pearson <- df %>% filter(metric == "pearson" & !is.na(r))
-  if (nrow(df_pearson) > 0) {
-    p <- ggplot(df_pearson, aes(x = feature, y = r, fill = method)) +
-      geom_bar(stat = "identity", position = "dodge") +
-      coord_flip() +
-      facet_wrap(~method, ncol = 1) +
-      labs(title = paste(ds, "Pearson Correlation by Method"), x = "Feature", y = "Pearson r") +
-      theme_classic() +
-      ylim(-1, 1)
-    pearson_plots[[ds]] <- p
-  }
-  # Spearman plot for selected methods
-  df_spearman <- df %>% filter(metric == "spearman" & !is.na(r))
-  if (nrow(df_spearman) > 0) {
-    p <- ggplot(df_spearman, aes(x = feature, y = r, fill = method)) +
-      geom_bar(stat = "identity", position = "dodge") +
-      coord_flip() +
-      facet_wrap(~method, ncol = 1) +
-      labs(title = paste(ds, "Spearman Correlation by Method"), x = "Feature", y = "Spearman r") +
-      theme_classic() +
-      ylim(-1, 1)
-    spearman_plots[[ds]] <- p
-  }
-}
-wrap_plots(pearson_plots) / wrap_plots(spearman_plots)
-```
-
-# Correlation Plots
-
 ```{r correlation-plots-combined, fig.width=18, fig.height=10, warning=FALSE, message=FALSE, results='hide', echo=FALSE}
 pearson_plots <- list()
 spearman_plots <- list()
