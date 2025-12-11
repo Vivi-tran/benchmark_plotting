@@ -42,7 +42,7 @@ datasets <- unique(c(
 
 # DockQ Scatter Plots
 
-```{r dockq-scatter-combined, fig.width=18, fig.height=10, warning=FALSE, message=FALSE, results='hide', echo=FALSE}
+```{r dockq-scatter-combined, fig.width=18, fig.height=6.5, warning=FALSE, message=FALSE, results='hide', echo=FALSE}
 plots <- list()
 for (f in dockq_files) {
   ds <- sub("\\..*$", "", basename(f))
@@ -58,6 +58,7 @@ for (f in dockq_files) {
       theme_classic() +
       ylim(0, 1) +
       theme(
+        plot.title = element_text(size = 18),
         axis.text.x = element_text(angle = 90, hjust = 1),
         axis.title.y = element_text(size = 18),
         axis.text.y = element_text(size = 14)
@@ -72,7 +73,7 @@ wrap_plots(plots)
 
 # Mean DockQ Bar Plots
 
-```{r meandockq-bar-combined, fig.width=18, fig.height=10, warning=FALSE, message=FALSE, results='hide', echo=FALSE}
+```{r meandockq-bar-combined, fig.width=18, fig.height=6.5, warning=FALSE, message=FALSE, results='hide', echo=FALSE}
 plots <- list()
 for (f in mean_dockq_files) {
   ds <- sub("\\..*$", "", basename(f))
@@ -84,7 +85,7 @@ for (f in mean_dockq_files) {
     theme_classic() +
     ylim(0, 1) +
     theme(
-      plot.title = element_text(size = 25),
+      plot.title = element_text(size = 18),
       axis.title = element_text(size = 18),
       axis.text = element_text(size = 14)
     )
@@ -95,7 +96,7 @@ wrap_plots(plots)
 
 # Correlation Plots
 
-```{r correlation-plots-combined, fig.width=18, fig.height=16, warning=FALSE, message=FALSE, results='hide', echo=FALSE}
+```{r correlation-plots-combined, fig.width=18, fig.height=13, warning=FALSE, message=FALSE, results='hide', echo=FALSE}
 pearson_plots <- list()
 spearman_plots <- list()
 for (f in correlation_files) {
@@ -113,7 +114,7 @@ for (f in correlation_files) {
       theme_classic() +
       ylim(-1, 1) +
       theme(
-        plot.title = element_text(size = 25),
+        plot.title = element_text(size = 18),
         axis.title = element_text(size = 18),
         axis.text = element_text(size = 16)
       )
