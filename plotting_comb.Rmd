@@ -40,21 +40,22 @@ datasets <- unique(c(
 ))
 ```
 
-# DockQ Scatter Plots
+# DockQ Box Plots
 
-```{r dockq-scatter-combined, fig.width=18, fig.height=5, warning=FALSE, message=FALSE, results='hide', echo=FALSE}
+```{r dockq-boxplot-combined, fig.width=18, fig.height=5, warning=FALSE, message=FALSE, results='hide', echo=FALSE}
 plots <- list()
 for (f in dockq_files) {
   ds <- sub("\\..*$", "", basename(f))
   df <- read_csv(f)
   if ("dockq" %in% names(df)) {
     x_col <- if (ds %in% names(df)) ds else names(df)[1]
-    # Color rank1 differently
     df$rank_type <- ifelse(df$rank == 1, "rank1", "other")
-    p <- ggplot(df, aes_string(x = x_col, y = "dockq", color = "rank_type")) +
-      geom_point(alpha = 0.7) +
+    p <- ggplot(df, aes_string(x = x_col, y = "dockq")) +
+      geom_boxplot(outlier.shape = NA, fill = "#377EB8", alpha = 0.3) +
+      geom_jitter(data = df %>% filter(rank_type == "other"), aes(color = rank_type), width = 0.2, alpha = 0.5) +
+      geom_jitter(data = df %>% filter(rank_type == "rank1"), aes(color = rank_type), width = 0.2, size = 3, alpha = 0.9) +
       scale_color_manual(values = c("rank1" = "#E41A1C", "other" = "#377EB8")) +
-      labs(title = paste(ds, "DockQ Scatter Plot"), x = ds, y = "DockQ", color = "Rank") +
+      labs(title = paste(ds, "DockQ Box Plot"), x = ds, y = "DockQ", color = "Rank") +
       theme_classic() +
       ylim(0, 1) +
       theme(axis.text.x = element_text(angle = 90, hjust = 1))
@@ -65,7 +66,6 @@ for (f in dockq_files) {
 }
 wrap_plots(plots)
 ```
-
 # Mean DockQ Bar Plots
 
 ```{r meandockq-bar-combined, fig.width=18, fig.height=5, warning=FALSE, message=FALSE, results='hide', echo=FALSE}
@@ -93,7 +93,7 @@ for (f in correlation_files) {
   ds <- sub("\\..*$", "", basename(f))
   df <- read_csv(f)
   # Filter only 'all' and 'rank1' methods
-  df <- df %>% filter(method %in% c("all", "rank1"))
+  df <- df %>% filter(method %in% c("all"))
   # Pearson plot for selected methods
   df_pearson <- df %>% filter(metric == "pearson" & !is.na(r))
   if (nrow(df_pearson) > 0) {
