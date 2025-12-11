@@ -1,5 +1,5 @@
 ---
-title: "DockQ Benchmark Report (Combined)"
+title: "DockQ Benchmark Report"
 date: "`r format(Sys.time(), '%d %B, %Y %H:%M:%S')`"
 output:
   html_document:
@@ -15,26 +15,6 @@ params:
   dockq_files: NULL
   mean_dockq_files: NULL
   correlation_files: NULL
-editor_options:
-  chunk_output_type: console
----
-
-```
-
----
-title: "DockQ Benchmark Report (Combined)"
-date: "`r format(Sys.time(), '%d %B, %Y %H:%M:%S')`"
-output:
-  html_document:
-    toc: true
-    toc_float: true
-    code_folding: hide
-    code_download: true
-    number_sections: true
-    df_print: kable
-    theme: lumen
-params:
-  output_dir: "output"
 editor_options:
   chunk_output_type: console
 ---
@@ -72,7 +52,8 @@ for (f in dockq_files) {
     p <- ggplot(df, aes_string(x = x_col, y = "dockq")) +
       geom_point(alpha = 0.7) +
       labs(title = paste(ds, "DockQ Scatter Plot"), x = ds, y = "DockQ") +
-      theme_classic()
+      theme_classic() +
+      ylim(0, 1)
     plots[[ds]] <- p
   } else {
     message(paste("File", f, "does not contain a 'dockq' column. Skipping."))
@@ -92,7 +73,8 @@ for (f in mean_dockq_files) {
   p <- ggplot(df_filtered, aes(x = metric, y = value, fill = metric)) +
     geom_bar(stat = "identity", position = "dodge") +
     labs(title = paste(ds, "Mean DockQ"), x = "Type", y = "Mean DockQ") +
-    theme_classic()
+    theme_classic() +
+    ylim(0, 1)
   plots[[ds]] <- p
 }
 wrap_plots(plots)
@@ -114,7 +96,8 @@ for (f in correlation_files) {
       geom_bar(stat = "identity", fill = "skyblue") +
       coord_flip() +
       labs(title = paste(ds, "Pearson Correlation (method = all)"), x = "Feature", y = "Pearson r") +
-      theme_classic()
+      theme_classic() +
+      ylim(-1, 1) 
     pearson_plots[[ds]] <- p
   }
   # Spearman plot
@@ -124,7 +107,8 @@ for (f in correlation_files) {
       geom_bar(stat = "identity", fill = "orange") +
       coord_flip() +
       labs(title = paste(ds, "Spearman Correlation (method = all)"), x = "Feature", y = "Spearman r") +
-      theme_classic()
+      theme_classic() +
+      ylim(-1, 1)
     spearman_plots[[ds]] <- p
   }
 }
