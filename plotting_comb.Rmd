@@ -110,7 +110,7 @@ for (f in correlation_files) {
     p <- ggplot(df_pearson, aes(x = feature, y = r)) +
       geom_bar(stat = "identity", position = "dodge", fill = "#377EB8") +
       coord_flip() +
-      labs(title = paste(ds, "Pearson Correlation (all method)"), x = "Feature", y = "Pearson r") +
+      labs(title = paste(ds, "Pearson Correlation"), x = "Feature", y = "Pearson r") +
       theme_classic() +
       ylim(-1, 1) +
       theme(
@@ -126,7 +126,7 @@ for (f in correlation_files) {
     p <- ggplot(df_spearman, aes(x = feature, y = r)) +
       geom_bar(stat = "identity", position = "dodge", fill = "#FFA500") +
       coord_flip() +
-      labs(title = paste(ds, "Spearman Correlation (all method)"), x = "Feature", y = "Spearman r") +
+      labs(title = paste(ds, "Spearman Correlation"), x = "Feature", y = "Spearman r") +
       theme_classic() +
       ylim(-1, 1) +
       theme(
