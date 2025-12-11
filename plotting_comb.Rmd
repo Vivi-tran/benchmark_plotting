@@ -57,7 +57,11 @@ for (f in dockq_files) {
       labs(title = paste(ds, "DockQ Scatter Plot"), x = ds, y = "DockQ", color = "Rank") +
       theme_classic() +
       ylim(0, 1) +
-      theme(axis.text.x = element_text(angle = 90, hjust = 1))
+      theme(
+        axis.text.x = element_text(angle = 90, hjust = 1),
+        axis.title.y = element_text(size = 18),
+        axis.text.y = element_text(size = 14)
+      )
     plots[[ds]] <- p
   } else {
     message(paste("File", f, "does not contain a 'dockq' column. Skipping."))
@@ -78,7 +82,11 @@ for (f in mean_dockq_files) {
     geom_bar(stat = "identity", position = "dodge") +
     labs(title = paste(ds, "Mean DockQ"), x = "Type", y = "Mean DockQ") +
     theme_classic() +
-    ylim(0, 1)
+    ylim(0, 1) +
+    theme(
+      axis.title = element_text(size = 18),
+      axis.text = element_text(size = 14)
+    )
   plots[[ds]] <- p
 }
 wrap_plots(plots)
@@ -97,23 +105,31 @@ for (f in correlation_files) {
   # Pearson plot for 'all' method
   df_pearson <- df %>% filter(metric == "pearson" & !is.na(r))
   if (nrow(df_pearson) > 0) {
-    p <- ggplot(df_pearson, aes(x = feature, y = r, fill = feature)) +
-      geom_bar(stat = "identity", position = "dodge") +
+    p <- ggplot(df_pearson, aes(x = feature, y = r)) +
+      geom_bar(stat = "identity", position = "dodge", fill = "#377EB8") +
       coord_flip() +
       labs(title = paste(ds, "Pearson Correlation (all method)"), x = "Feature", y = "Pearson r") +
       theme_classic() +
-      ylim(-1, 1)
+      ylim(-1, 1) +
+      theme(
+        axis.title = element_text(size = 18),
+        axis.text = element_text(size = 14)
+      )
     pearson_plots[[ds]] <- p
   }
   # Spearman plot for 'all' method
   df_spearman <- df %>% filter(metric == "spearman" & !is.na(r))
   if (nrow(df_spearman) > 0) {
-    p <- ggplot(df_spearman, aes(x = feature, y = r, fill = feature)) +
-      geom_bar(stat = "identity", position = "dodge") +
+    p <- ggplot(df_spearman, aes(x = feature, y = r)) +
+      geom_bar(stat = "identity", position = "dodge", fill = "#FFA500") +
       coord_flip() +
       labs(title = paste(ds, "Spearman Correlation (all method)"), x = "Feature", y = "Spearman r") +
       theme_classic() +
-      ylim(-1, 1)
+      ylim(-1, 1) +
+      theme(
+        axis.title = element_text(size = 18),
+        axis.text = element_text(size = 14)
+      )
     spearman_plots[[ds]] <- p
   }
 }
