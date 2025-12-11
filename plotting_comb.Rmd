@@ -42,7 +42,7 @@ datasets <- unique(c(
 
 # DockQ Scatter Plots
 
-```{r dockq-scatter-combined, fig.width=18, fig.height=5, warning=FALSE}
+```{r dockq-scatter-combined, fig.width=18, fig.height=5, warning=FALSE, message=FALSE, results='hide', echo=FALSE}
 plots <- list()
 for (f in dockq_files) {
   ds <- sub("\\..*$", "", basename(f))
@@ -64,7 +64,7 @@ wrap_plots(plots)
 
 # Mean DockQ Bar Plots
 
-```{r meandockq-bar-combined, fig.width=18, fig.height=5, warning=FALSE}
+```{r meandockq-bar-combined, fig.width=18, fig.height=5, warning=FALSE, message=FALSE, results='hide', echo=FALSE}
 plots <- list()
 for (f in mean_dockq_files) {
   ds <- sub("\\..*$", "", basename(f))
@@ -82,7 +82,7 @@ wrap_plots(plots)
 
 # Correlation Plots
 
-```{r correlation-plots-combined, fig.width=18, fig.height=10, warning=FALSE}
+```{r correlation-plots-combined, fig.width=18, fig.height=10, warning=FALSE, message=FALSE, results='hide', echo=FALSE}
 pearson_plots <- list()
 spearman_plots <- list()
 for (f in correlation_files) {
